@@ -1,4 +1,4 @@
-import { searchCities } from './weatherAPI';
+import { searchCities, getWeatherByCity } from './weatherAPI';
 
 /**
  * Cria um elemento HTML com as informações passadas
@@ -116,6 +116,9 @@ export function handleSearch(event) {
 
   const searchInput = document.getElementById('search-input');
   const searchValue = searchInput.value;
-  searchCities(searchValue);
-  // seu código aqui
+  searchCities(searchValue).then((result) => {
+    const url = result.map((element) => element.url);
+    const urlResult = url.map((element) => getWeatherByCity(element));
+    console.log(urlResult);
+  });
 }
