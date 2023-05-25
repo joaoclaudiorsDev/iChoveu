@@ -5,13 +5,12 @@ export const searchCities = async (term) => {
     const response = await fetch(`http://api.weatherapi.com/v1/search.json?lang=pt&key=${token}&q=${term}`);
     const data = await response.json();
     if (data.length === 0) {
-      throw new Error('Nenhuma cidade encontrada');
+      alert('Nenhuma cidade encontrada');
     } else {
-      return data;
+      console.log(data);
     }
   } catch (error) {
     console.error(error);
-    alert(error.message);
   }
 };
 
