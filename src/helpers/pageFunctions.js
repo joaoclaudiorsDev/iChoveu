@@ -110,15 +110,25 @@ export function createCityElement(cityInfo) {
 /**
  * Lida com o evento de submit do formulário de busca
  */
-export function handleSearch(event) {
+export async function handleSearch(event) {
   event.preventDefault();
   clearChildrenById('cities');
 
   const searchInput = document.getElementById('search-input');
   const searchValue = searchInput.value;
-  searchCities(searchValue).then((result) => {
-    const url = result.map((element) => element.url);
-    const urlResult = url.map((element) => getWeatherByCity(element));
-    console.log(urlResult);
-  });
+
+  try {
+    const result = await searchCities(searchValue);
+    const urls = result.map((element) => element.url);
+    const expected = urls.map((element) => getWeatherByCity(element));
+
+    const resultsArray = await Promise.all(expected);
+
+    resultsArray.forEach((element) => {
+      const card = createCityElement(element);
+      document.getElementById('cities').appendChild(card);
+    });
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }
